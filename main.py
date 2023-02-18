@@ -3,6 +3,8 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.utils import load_img, img_to_array
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 import numpy as np
+import time
+
 
 st.set_option('deprecation.showfileUploaderEncoding', False)
 @st.cache(allow_output_mutation=True)
@@ -39,6 +41,7 @@ def app():
     if uploaded_file is not None:
         # Loading the image and displaying it
         image = load_img(uploaded_file, target_size=img_size)
+
         col1, col2, col3 = st.columns(3)
         with col1:
             st.write(' ')
@@ -46,6 +49,12 @@ def app():
             st.image(image, caption="Uploaded Image", width=200, )
         with col3:
             st.write(' ')
+
+        my_bar = st.progress(0)
+
+        for percent_complete in range(100):
+            time.sleep(0.01)
+            my_bar.progress(percent_complete + 1)
 
         # Converting and preprocessing the image
         image = img_to_array(image)
