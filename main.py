@@ -25,9 +25,10 @@ class_names = ['diseased cotton leaf',
                'fresh cotton leaf',
                'fresh cotton plant']
 
+st.title('Cotton Plant Disease Predictor 🌿')
+
 # Define the Streamlit app
 def app():
-    st.title('Cotton Plant Disease Predictor 🌿')
     st.write('Upload an image of your cotton plant or leaf, and the AI model will predict if its healthy or diseased.')
     st.write('''If you're here to just try it out, then you can download an image from [Test Dataset](https://drive.google.com/drive/folders/1NNeuZrVMs5ckQx4TBmoaSlkpgTAuDstD?usp=share_link) and upload it here.''')
 
@@ -36,8 +37,17 @@ def app():
 
     # If the user has uploaded an image
     if uploaded_file is not None:
-        # Load the image and preprocess it
+        # Loading the image and displaying it
         image = load_img(uploaded_file, target_size=img_size)
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.write(' ')
+        with col2:
+            st.image(image, caption="Uploaded Image", width=200, )
+        with col3:
+            st.write(' ')
+
+        # Converting and preprocessing the image
         image = img_to_array(image)
         image = preprocess_input(image)
         image = np.expand_dims(image, axis=0)
@@ -46,10 +56,11 @@ def app():
         prediction = model.predict(image)
         predicted_class = class_names[np.argmax(prediction)]
 
-        # Display the prediction to the user
+        # Displaying the prediction
         t = 'This is a '+ predicted_class
         if np.argmax(prediction) < 2:
             st.error(t)
+
         else:
             st.success(t)
     else:
